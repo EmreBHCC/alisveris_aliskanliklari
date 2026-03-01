@@ -83,6 +83,7 @@ let answers = [];
 let sessionID = '';
 let contactEmail = '';
 let contactPhone = '';
+let isFinished = false;
 
 // DOM Elements
 const views = {
@@ -134,6 +135,7 @@ function switchView(viewName) {
 }
 
 function initQuiz() {
+  isFinished = false;
   sessionID = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   currentIndex = 0;
   answers = questions.map(() => null);
@@ -272,12 +274,13 @@ function updateNavButtons() {
 }
 
 function handleNext() {
-  if (UI.nextBtn.disabled) return;
+  if (UI.nextBtn.disabled || isFinished) return;
 
   if (currentIndex < questions.length - 1) {
     currentIndex++;
     renderQuestion();
   } else {
+    isFinished = true;
     showResults();
   }
 }
@@ -309,7 +312,8 @@ function showResults() {
     if (q.isScored) maxScore += 4;
   }); // 28 * 4 = 112
 
-  UI.totalScore.textContent = score;
+  const scoreBase100 = Math.round((score / maxScore) * 100);
+  UI.totalScore.textContent = scoreBase100;
 
   // Calculate level
   let levelClass = '';
