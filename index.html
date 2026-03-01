@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çevrimiçi Alışveriş Bağımlılığı Testi</title>
+    <meta name="description"
+        content="Bergen Alışveriş Bağımlılığı Ölçeği (BSAS) üzerinden çevrimiçi alışveriş alışkanlıklarınızı ve bağımlılık seviyenizi test edin.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main id="app" class="glass-container">
+        <!-- Start View -->
+        <section id="start-view" class="view active">
+            <div class="badge">ALIŞVERİŞ ALIŞKANLIĞI ANKET FORMU</div>
+            <h1>Çevrimiçi Alışveriş Bağımlılığı Testi</h1>
+            <div class="scrollable-text">
+                <p>
+                    <strong>Sayın Katılımcı,</strong>
+                </p>
+                <p>
+                    Bu çalışma çevrimiçi alışveriş davranışlarını psikolojik ve davranışsal boyutlarıyla incelemek
+                    amacıyla
+                    yürütülen bir doktora araştırmasının parçasıdır. Araştırmaya katılımınız tamamen gönüllülük esasına
+                    dayanmaktadır ve anketin tamamlanması yaklaşık 5–10 dakika sürmektedir.
+                    İstediğiniz herhangi bir soruyu yanıtlamayabilir veya ankete dilediğiniz anda son verebilirsiniz;
+                    katılmamanız ya da çalışmadan çekilmeniz sizin için herhangi bir olumsuz sonuç doğurmaz. Bu
+                    araştırmada
+                    toplanan veriler anonimdir; ad, kimlik numarası veya sizi doğrudan tanımlayabilecek kişisel bilgiler
+                    talep edilmemektedir. Yanıtlarınız yalnızca bilimsel amaçlarla analiz edilecek, üçüncü kişilerle
+                    paylaşılmayacak ve 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında korunacaktır.
+                    Veriler anonimleştirildikten sonra bilimsel şeffaflık ilkeleri doğrultusunda (github.com,
+                    kaggle.com,
+                    zenodo) açık bilim platformlarında paylaşılabilir.
+                </p>
+                <p>
+                    Araştırmaya katılımın herhangi bir maddi ya da psikolojik risk oluşturması beklenmemektedir. Anketi
+                    tamamladıktan sonra isteğe bağlı olarak çalışmanın ikinci aşamasına (çevrimiçi web uygulaması) ve
+                    EEG
+                    ölçüm aşamasına katılabilirsiniz; bu aşamalara katılım zorunlu değildir ve EEG ölçümü non-invaziv
+                    bir
+                    yöntemdir. Lütfen aşağıdaki soruları yanıtlarken son 12 aydaki düşüncelerinizi, duygularınızı ve
+                    davranışlarınızı göz önünde bulundurunuz.
+                </p>
+            </div>
+            <div class="features">
+                <span><i class="icon">⏱</i> Yaklaşık 5-10 dakika</span>
+                <span><i class="icon">📊</i> 53 Soru</span>
+            </div>
+            <button id="start-btn" class="btn primary-btn" style="margin-top:1rem;">Teste Başla <span
+                    class="arrow">→</span></button>
+        </section>
+
+        <!-- Contact View -->
+        <section id="contact-view" class="view">
+            <div class="badge">İSTEĞE BAĞLI</div>
+            <h2>İletişim Bilgileriniz</h2>
+            <div class="scrollable-text" style="max-height: 20vh; height: auto;">
+                <p>Çalışmanın ikinci aşamasına (çevrimiçi web uygulaması) veya EEG ölçüm aşamasına katılmak isterseniz
+                    bizimle iletişim bilgilerinizi paylaşabilirsiniz. Bu bölümü doldurmak tamamen isteğe bağlıdır,
+                    bilgilerinizi vermeden de ankete devam edebilirsiniz.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="contact-email">E-posta Adresi</label>
+                <input type="email" id="contact-email" class="text-input" placeholder="ornek@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="contact-phone">Telefon Numarası</label>
+                <input type="tel" id="contact-phone" class="text-input" placeholder="0555 555 55 55">
+            </div>
+
+            <div class="navigation-buttons" style="margin-top: 2rem; width: 100%;">
+                <button id="skip-contact-btn" class="btn secondary-btn">Bu Adımı Atla</button>
+                <button id="submit-contact-btn" class="btn primary-btn">Testi Başlat <span
+                        class="arrow">→</span></button>
+            </div>
+        </section>
+
+        <!-- Question View -->
+        <section id="question-view" class="view">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="question-header">
+                <span id="question-counter">Soru 1 / 28</span>
+            </div>
+            <h2 id="question-text">Soru metni buraya gelecek</h2>
+
+            <div class="options-container" id="options-container">
+                <!-- Options will be injected by JavaScript -->
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="prev-btn" class="btn secondary-btn" disabled>← Önceki</button>
+                <button id="next-btn" class="btn primary-btn" disabled>Sonraki →</button>
+            </div>
+        </section>
+
+        <!-- Result View -->
+        <section id="result-view" class="view">
+            <div class="result-header">
+                <h2>Test Sonucunuz</h2>
+                <div class="score-circle">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                        <path class="circle-bg" d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle" id="score-circle-path" stroke-dasharray="0, 100" d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text x="18" y="20.35" class="percentage" id="score-text">0</text>
+                    </svg>
+                </div>
+                <div class="score-label">Toplam Puan: <span id="total-score">0</span> / 112</div>
+            </div>
+
+            <div class="result-card" id="result-card">
+                <h3 id="result-level">Level</h3>
+                <p id="result-desc">Description</p>
+            </div>
+
+            <div id="late-contact-container" class="late-contact-container" style="display: none;">
+                <h3>Web Uygulaması ve EEG Ölçümü İçin İletişim</h3>
+                <p>Araştırmamızın sonraki aşamalarına katılmak isterseniz iletişim bilgilerinizi bırakabilirsiniz
+                    (İsteğe bağlı).</p>
+                <div class="form-group">
+                    <input type="email" id="late-email" class="text-input" placeholder="E-posta Adresiniz">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="late-phone" class="text-input" placeholder="Telefon Numaranız">
+                </div>
+                <button id="late-submit-btn" class="btn primary-btn" style="width: 100%;">Bilgilerimi Gönder</button>
+                <p id="late-feedback" style="display:none; color: var(--success); margin-top: 15px; font-weight: bold;">
+                    Bilgileriniz başarıyla kaydedildi, teşekkür ederiz!</p>
+            </div>
+
+            <button id="restart-btn" class="btn secondary-btn" style="margin-top: 2rem;">Testi Yeniden Çöz</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
