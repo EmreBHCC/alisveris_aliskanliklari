@@ -76,7 +76,7 @@ const questions = [
   { text: "Bu hisler satın alma kararınızı ne ölçüde etkiledi?", options: ["Hiç etkilemedi", "Az etkiledi", "Orta düzeyde etkiledi", "Oldukça etkiledi", "Çok güçlü etkiledi"], type: "single" }
 ];
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzogT4LbY2t8Mv3nBhpVBbMwtdrvBqxV3e6HucIfQ6Bb1qxMJljPo-OwqH3TIc_ySl-5g/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbziB-CREuepduEZ0ooHFRp12Az_PE1xJRRG0P20YHBcvcVTgTkwpsXbHqNik2ehnhabHg/exec";
 
 let currentIndex = 0;
 let answers = [];
@@ -307,6 +307,29 @@ function calculateScore() {
   return score;
 }
 
+function getLevelTextInfo(score) {
+  if (score >= 0 && score <= 28) {
+    return {
+      class: 'level-low',
+      title: 'Düşük Bağımlılık',
+      desc: 'Çevrimiçi alışveriş alışkanlıklarınız kontrol altında görünüyor. Alışverişin hayatınızı veya psikolojinizi olumsuz etkilemediği sağlıklı bir düzeydesiniz.'
+    };
+  } else if (score >= 29 && score <= 56) {
+    return {
+      class: 'level-medium',
+      title: 'Orta Seviyede Bağımlılık',
+      desc: 'Çevrimiçi alışveriş alışkanlıklarınız riskli bir düzeyde olabilir. Alışverişe ayırdığınız zamanı ve harcamalarınızı gözden geçirmek faydalı olacaktır.'
+    };
+  } else {
+    // 57-112 arası
+    return {
+      class: 'level-high',
+      title: 'Yüksek Bağımlılık',
+      desc: 'Çevrimiçi alışveriş alışkanlıklarınız hayatınızı önemli ölçüde olumsuz etkileyen güçlü bir bağımlılığa dönüşmüş olabilir. Bir uzmandan destek almanız önerilir.'
+    };
+  }
+}
+
 function showResults() {
   UI.progressBar.style.width = '100%';
   switchView('result');
@@ -321,29 +344,11 @@ function showResults() {
   UI.totalScore.textContent = scoreBase100;
 
   // Calculate level
-  let levelClass = '';
-  let levelText = '';
-  let descText = '';
+  const levelInfo = getLevelTextInfo(score);
 
-  UI.resultCard.className = 'result-card'; // Reset
-
-  if (score >= 0 && score <= 28) {
-    levelClass = 'level-low';
-    levelText = 'Düşük Bağımlılık';
-    descText = 'Çevrimiçi alışveriş alışkanlıklarınız kontrol altında görünüyor. Alışverişin hayatınızı veya psikolojinizi olumsuz etkilemediği sağlıklı bir düzeydesiniz.';
-  } else if (score >= 29 && score <= 56) {
-    levelClass = 'level-medium';
-    levelText = 'Orta Seviyede Bağımlılık';
-    descText = 'Çevrimiçi alışveriş alışkanlıklarınız riskli bir düzeyde olabilir. Alışverişe ayırdığınız zamanı ve harcamalarınızı gözden geçirmek faydalı olacaktır.';
-  } else {
-    levelClass = 'level-high';
-    levelText = 'Yüksek Bağımlılık';
-    descText = 'Çevrimiçi alışveriş alışkanlıklarınız hayatınızı önemli ölçüde olumsuz etkileyen güçlü bir bağımlılığa dönüşmüş olabilir. Bir uzmandan destek almanız önerilir.';
-  }
-
-  UI.resultCard.classList.add(levelClass);
-  UI.resultLevel.textContent = levelText;
-  UI.resultDesc.textContent = descText;
+  UI.resultCard.className = 'result-card ' + levelInfo.class; // Set and Reset
+  UI.resultLevel.textContent = levelInfo.title;
+  UI.resultDesc.textContent = levelInfo.desc;
 
   // Animate circular chart
   setTimeout(() => {
@@ -432,14 +437,17 @@ function sendDataToGS(actionType) {
     return;
   }
 
+  const currentScore = calculateScore();
+  const currentLevelInfo = getLevelTextInfo(currentScore);
+
   const payload = {
     action: actionType, // 'init', 'progress', 'finish', veya 'updateContact'
     id: sessionID,
     email: contactEmail,
     phone: contactPhone,
     answers: answers,
-    totalScore: calculateScore(),
-    levelText: UI.resultLevel.textContent || ""
+    totalScore: currentScore,
+    levelText: currentLevelInfo.title
   };
 
   fetch(WEB_APP_URL, {
