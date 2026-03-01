@@ -141,6 +141,9 @@ function initQuiz() {
   answers = questions.map(() => null);
   switchView('question');
   renderQuestion();
+
+  // İlk çalıştığında veri tabanında (Google Sheets) boş bir satır rezerve et.
+  sendDataToGS('init');
 }
 
 function renderQuestion() {
@@ -279,6 +282,8 @@ function handleNext() {
   if (currentIndex < questions.length - 1) {
     currentIndex++;
     renderQuestion();
+    // Her "Sonraki" butonuna basıldığında ilerlemeyi veri tabanına arka planda gönder
+    sendDataToGS('progress');
   } else {
     isFinished = true;
     showResults();
@@ -373,8 +378,8 @@ function showResults() {
     UI.lateContactContainer.style.display = 'none';
   }
 
-  // İlk veriyi Sheets'e gönder
-  sendDataToGS(false);
+  // İlk veriyi ya da bitiş verisini Sheets'e gönder
+  sendDataToGS('finish');
 }
 
 // Event Listeners
@@ -412,14 +417,14 @@ UI.lateSubmitBtn.addEventListener('click', () => {
     contactPhone = p;
     UI.lateSubmitBtn.disabled = true;
     UI.lateSubmitBtn.textContent = 'Gönderiliyor...';
-    sendDataToGS(true);
+    sendDataToGS('updateContact');
   }
 });
 
-function sendDataToGS(isUpdate) {
+function sendDataToGS(actionType) {
   if (!WEB_APP_URL || WEB_APP_URL === "") {
     console.log("Web App URL ayarlanmadı, veriler localde simüle ediliyor.");
-    if (isUpdate) {
+    if (actionType === 'updateContact') {
       UI.lateSubmitBtn.style.display = 'none';
       UI.lateFeedback.style.display = 'block';
       UI.lateFeedback.textContent = "Veriler gönderildi (SİMÜLASYON BAŞARILI, GOOGLE URL EKSİK)";
@@ -428,13 +433,13 @@ function sendDataToGS(isUpdate) {
   }
 
   const payload = {
-    action: isUpdate ? 'updateContact' : 'newEntry',
+    action: actionType, // 'init', 'progress', 'finish', veya 'updateContact'
     id: sessionID,
     email: contactEmail,
     phone: contactPhone,
     answers: answers,
     totalScore: calculateScore(),
-    levelText: UI.resultLevel.textContent
+    levelText: UI.resultLevel.textContent || ""
   };
 
   fetch(WEB_APP_URL, {
@@ -445,11 +450,11 @@ function sendDataToGS(isUpdate) {
     },
     body: JSON.stringify(payload)
   }).then(() => {
-    if (isUpdate) {
+    if (actionType === 'updateContact') {
       UI.lateSubmitBtn.style.display = 'none';
       UI.lateFeedback.style.display = 'block';
       UI.lateFeedback.textContent = "Bilgileriniz başarıyla kaydedildi, teşekkür ederiz!";
     }
-    console.log("Veri Google Sheets'e iletildi.");
+    console.log("Veri Google Sheets'e iletildi. (" + actionType + ")");
   }).catch(err => console.error("Veri gönderilirken hata:", err));
 }
