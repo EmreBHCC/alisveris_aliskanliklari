@@ -76,7 +76,7 @@ const questions = [
   { text: "Bu hisler satın alma kararınızı ne ölçüde etkiledi?", options: ["Hiç etkilemedi", "Az etkiledi", "Orta düzeyde etkiledi", "Oldukça etkiledi", "Çok güçlü etkiledi"], type: "single" }
 ];
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyhhAp4PKtYkQiev4hBCho14_azR5tTr9oxkMQLGrfvo8M66BZYX4e-M14QWv4T6iMnWA/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzogT4LbY2t8Mv3nBhpVBbMwtdrvBqxV3e6HucIfQ6Bb1qxMJljPo-OwqH3TIc_ySl-5g/exec";
 
 let currentIndex = 0;
 let answers = [];
